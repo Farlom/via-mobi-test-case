@@ -17,7 +17,10 @@ return new class extends Migration
             $table->string('name');
             $table->string('description')->nullable();
             $table->integer('price');
-            $table->foreignIdFor(Category::class);
+            $table->foreignIdFor(Category::class)
+                ->constrained()
+                ->cascadeOnUpdate()
+                ->cascadeOnDelete();
             $table->timestamps();
         });
     }
