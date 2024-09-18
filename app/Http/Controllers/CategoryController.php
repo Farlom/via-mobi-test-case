@@ -4,15 +4,22 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CategoryRequest;
 use App\Http\Resources\CategoryResource;
+use App\Http\Services\CategoryService;
 use App\Models\Category;
 
 class CategoryController extends Controller
 {
+    public function __construct(public CategoryService $service)
+    {
+
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
+        return $this->service;
         return CategoryResource::collection(Category::all());
     }
 

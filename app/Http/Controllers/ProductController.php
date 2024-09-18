@@ -3,17 +3,25 @@
 namespace App\Http\Controllers;
 
 
+use App\Http\Requests\FilterRequest;
 use App\Http\Requests\ProductRequest;
 use App\Http\Resources\ProductResource;
+use App\Http\Services\ProductService;
 use App\Models\Product;
 
 class ProductController extends Controller
 {
+    public function __construct(public ProductService $service)
+    {
+
+    }
+
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(FilterRequest $request)
     {
+        return $this->service->getProducts($request);
         return ProductResource::collection(Product::all());
     }
 
