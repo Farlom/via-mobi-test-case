@@ -4,11 +4,15 @@ namespace App\Http\Services;
 
 use App\Http\Requests\FilterRequest;
 use App\Models\Product;
-use Illuminate\Database\Eloquent\Builder;
 
 class ProductService
 {
-    public function getProducts(FilterRequest $request)
+    /**
+     * @param FilterRequest $request
+     * @param int $perPage
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     */
+    public function getProducts(FilterRequest $request, int $perPage = 5): \Illuminate\Contracts\Pagination\LengthAwarePaginator
     {
         $query = Product::query();
 
@@ -25,6 +29,6 @@ class ProductService
                 $query->orderByDesc('price');
             }
         }
-        return $query->paginate(1)->withQueryString();
+        return $query->paginate($perPage)->withQueryString();
     }
 }

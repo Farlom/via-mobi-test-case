@@ -21,8 +21,7 @@ class ProductController extends Controller
      */
     public function index(FilterRequest $request)
     {
-        return $this->service->getProducts($request);
-        return ProductResource::collection(Product::all());
+        return ProductResource::collection($this->service->getProducts($request));
     }
 
     /**
