@@ -9,7 +9,7 @@ use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
 {
-    public function store(Request $request)
+    public function login(Request $request)
     {
         $request->validate([
             'email' => ['required', 'email'],
@@ -26,16 +26,14 @@ class AuthController extends Controller
 
         $user = User::where('email', $request->email)->first();
 
-        if ($user->is_admin)
-        {
+        if ($user->is_admin) {
             $abilities = [
                 'server:create',
                 'server:read',
                 'server:update',
                 'server:delete',
             ];
-        }
-        else {
+        } else {
             $abilities = [
                 'server:read',
             ];
@@ -44,5 +42,10 @@ class AuthController extends Controller
         $authToken = $user->createToken($request->email, $abilities)->plainTextToken;
 
         return ['token' => $authToken];
+    }
+
+    public function logout(Request $request)
+    {
+        $request->user()->currentAccessToken()->delete();
     }
 }

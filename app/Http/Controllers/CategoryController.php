@@ -9,17 +9,11 @@ use App\Models\Category;
 
 class CategoryController extends Controller
 {
-    public function __construct(public CategoryService $service)
-    {
-
-    }
-
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return $this->service;
         return CategoryResource::collection(Category::all());
     }
 

@@ -11,6 +11,9 @@ use App\Models\Product;
 
 class ProductController extends Controller
 {
+    /**
+     * @param ProductService $service
+     */
     public function __construct(public ProductService $service)
     {
 

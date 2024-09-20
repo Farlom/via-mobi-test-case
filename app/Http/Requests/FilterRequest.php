@@ -29,16 +29,17 @@ class FilterRequest extends FormRequest
 
         return [
             'sort' => [
-                'nullable',
+                'sometimes',
                 'string',
                 Rule::in($sortParameters),
             ],
-            'price' => ['nullable', 'array'],
+            'price' => ['sometimes', 'array'],
             'price.*' => ['numeric'],
 
-            'category' => ['nullable', 'array'],
+            'category' => ['sometimes', 'array'],
             'category.*' => ['numeric', 'exists:categories,id'],
 
+            'q' => ['sometimes', 'string'],
         ];
     }
 
@@ -56,21 +57,23 @@ class FilterRequest extends FormRequest
      */
     private function serializePrice(): void
     {
-        $priceRange = explode('-', $this->price);
-        if (count($priceRange) === 1) {
-            $this->merge([
-                'price' => [
-                    0,
-                    $priceRange[0],
-                ],
-            ]);
-        } else {
-            $this->merge([
-                'price' => [
-                    $priceRange[0],
-                    $priceRange[1],
-                ],
-            ]);
+        if ($this->price) {
+            $priceRange = explode('-', $this->price);
+            if (count($priceRange) === 1) {
+                $this->merge([
+                    'price' => [
+                        0,
+                        $priceRange[0],
+                    ],
+                ]);
+            } else {
+                $this->merge([
+                    'price' => [
+                        $priceRange[0],
+                        $priceRange[1],
+                    ],
+                ]);
+            }
         }
     }
 
@@ -81,10 +84,12 @@ class FilterRequest extends FormRequest
      */
     private function serializeCategory(): void
     {
-        $categories = explode(',', $this->category);
+        if ($this->category) {
+            $categories = explode(',', $this->category);
+            $this->merge([
+                'category' => $categories,
+            ]);
+        }
 
-        $this->merge([
-            'category' => $categories,
-        ]);
     }
 }

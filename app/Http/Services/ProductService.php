@@ -16,6 +16,10 @@ class ProductService
     {
         $query = Product::query();
 
+        if ($request->has('q')) {
+            $query->where('name', 'like', '%' . $request->q . '%');
+        }
+
         if ($request->has('price')) {
             $query->whereBetween('price', $request->price);
         }
@@ -28,7 +32,11 @@ class ProductService
             if ($request->sort == 'price_desc') {
                 $query->orderByDesc('price');
             }
+            if ($request->sort == 'price_asc') {
+                $query->orderBy('price');
+            }
         }
+
         return $query->paginate($perPage)->withQueryString();
     }
 }

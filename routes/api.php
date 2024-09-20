@@ -19,24 +19,26 @@ use Illuminate\Support\Facades\Route;
 
 
 
-Route::post('personal-access-token', [AuthController::class, 'store']);
+Route::post('login', [AuthController::class, 'login']);
 
 Route::middleware('auth:sanctum')->group(function (){
+    Route::get('logout', [AuthController::class, 'logout']);
+
     //    Route::apiResource('products', ProductController::class);
     Route::controller(ProductController::class)->group(function () {
         Route::get('products', 'index')->middleware('abilities:server:read');
         Route::post('products', 'store')->middleware('abilities:server:create,server:read,server:update,server:delete');
-        Route::get('products/{id}', 'show')->middleware('abilities:server:read');
-        Route::put('products/{id}', 'update')->middleware('abilities:server:create,server:read,server:update,server:delete');
-        Route::delete('products/{id}', 'destroy')->middleware('abilities:server:create,server:read,server:update,server:delete');
+        Route::get('products/{product:id}', 'show')->middleware('abilities:server:read');
+        Route::put('products/{product:id}', 'update')->middleware('abilities:server:create,server:read,server:update,server:delete');
+        Route::delete('products/{product:id}', 'destroy')->middleware('abilities:server:create,server:read,server:update,server:delete');
     });
 
     //    Route::apiResource('categories', CategoryController::class);
     Route::controller(CategoryController::class)->group(function () {
         Route::get('categories', 'index')->middleware('abilities:server:read');
         Route::post('categories', 'store')->middleware('abilities:server:create,server:read,server:update,server:delete');
-        Route::get('categories/{id}', 'show')->middleware('abilities:server:read');
-        Route::put('categories/{id}', 'update')->middleware('abilities:server:create,server:read,server:update,server:delete');
-        Route::delete('categories/{id}', 'destroy')->middleware('abilities:server:create,server:read,server:update,server:delete');
+        Route::get('categories/{category:id}', 'show')->middleware('abilities:server:read');
+        Route::put('categories/{category:id}', 'update')->middleware('abilities:server:create,server:read,server:update,server:delete');
+        Route::delete('categories/{category:id}', 'destroy')->middleware('abilities:server:create,server:read,server:update,server:delete');
     });
 });
